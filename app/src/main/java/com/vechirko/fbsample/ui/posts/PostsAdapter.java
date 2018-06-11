@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.vechirko.fbsample.R;
 import com.vechirko.fbsample.data.model.PostModel;
-import com.vechirko.fbsample.ui.post.PostActivity;
+import com.vechirko.fbsample.ui.post_arch.PostActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
