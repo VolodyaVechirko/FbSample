@@ -1,4 +1,4 @@
-package com.vechirko.fbsample.posts;
+package com.vechirko.fbsample.ui.posts;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.vechirko.fbsample.R;
 import com.vechirko.fbsample.data.model.PostModel;
-import com.vechirko.fbsample.post.PostActivity;
+import com.vechirko.fbsample.ui.post.PostActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;

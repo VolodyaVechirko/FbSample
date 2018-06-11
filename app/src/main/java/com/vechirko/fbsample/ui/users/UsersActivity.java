@@ -1,4 +1,4 @@
-package com.vechirko.fbsample.users;
+package com.vechirko.fbsample.ui.users;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,9 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.vechirko.fbsample.R;
-import com.vechirko.fbsample.data.Errors;
 import com.vechirko.fbsample.data.model.UserModel;
-import com.vechirko.fbsample.data.repository.Repository;
 
 import java.util.Collection;
 
@@ -25,23 +23,24 @@ public class UsersActivity extends AppCompatActivity implements UsersView {
     TextView emptyView;
     ProgressBar progress;
 
-    Repository repository;
+    UsersPresenter presenter;
     UsersAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
-        repository = new Repository();
         findViewsById();
         initViews();
 
+        presenter = new UsersPresenter(this);
+        presenter.getUsers();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        repository.onDestroy();
+        presenter.onDestroy();
     }
 
     private void initViews() {
@@ -49,14 +48,6 @@ public class UsersActivity extends AppCompatActivity implements UsersView {
         fab.setOnClickListener(v -> {/**/});
 
         recyclerView.setAdapter(adapter = new UsersAdapter());
-
-        showLoading(true);
-        repository.getAll(UserModel.class)
-                .subscribe(
-                        this::setData,
-                        Errors.handle(this::showError),
-                        () -> showLoading(false)
-                );
     }
 
     private void findViewsById() {

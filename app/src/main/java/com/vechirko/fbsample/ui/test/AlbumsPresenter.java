@@ -1,4 +1,4 @@
-package com.vechirko.fbsample.test;
+package com.vechirko.fbsample.ui.test;
 
 import com.vechirko.fbsample.data.Errors;
 import com.vechirko.fbsample.data.repository.Destroyable;

@@ -1,4 +1,4 @@
-package com.vechirko.fbsample.posts;
+package com.vechirko.fbsample.ui.test;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,11 +14,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.vechirko.fbsample.R;
-import com.vechirko.fbsample.data.model.PostModel;
+import com.vechirko.fbsample.data.test.AlbumContract;
 
 import java.util.Collection;
 
-public class PostsActivity extends AppCompatActivity implements PostsView {
+public class AlbumsActivity extends AppCompatActivity implements AlbumsView {
 
     Toolbar toolbar;
     FloatingActionButton fab;
@@ -26,25 +26,25 @@ public class PostsActivity extends AppCompatActivity implements PostsView {
     TextView emptyView;
     ProgressBar progress;
 
-    PostsAdapter adapter;
-    PostsPresenter presenter;
+    AlbumsPresenter presenter;
+    AlbumsAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_posts);
+        setContentView(R.layout.activity_albums);
         findViewsById();
         initViews();
 
-        presenter = new PostsPresenter(this);
-        presenter.getPosts();
+        presenter = new AlbumsPresenter(this);
+        presenter.getAll();
     }
 
     private void initViews() {
         setSupportActionBar(toolbar);
         fab.setOnClickListener(v -> {/**/});
 
-        recyclerView.setAdapter(adapter = new PostsAdapter());
+        recyclerView.setAdapter(adapter = new AlbumsAdapter());
     }
 
     private void findViewsById() {
@@ -57,26 +57,24 @@ public class PostsActivity extends AppCompatActivity implements PostsView {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_albums, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_reload:
-                presenter.getPosts();
+            case R.id.action_all:
+                presenter.getAll();
+                return true;
+            case R.id.action_favourite:
+                presenter.getFavourite();
                 return true;
             case R.id.action_settings:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public String getUserId() {
-        return null;
     }
 
     @Override
@@ -94,7 +92,7 @@ public class PostsActivity extends AppCompatActivity implements PostsView {
     }
 
     @Override
-    public void setData(Collection<PostModel> data) {
+    public void setData(Collection<AlbumContract> data) {
         showEmptyView(data.isEmpty());
         adapter.setData(data);
     }

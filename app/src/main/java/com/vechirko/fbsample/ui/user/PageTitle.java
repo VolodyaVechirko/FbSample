@@ -1,4 +1,4 @@
-package com.vechirko.fbsample.user;
+package com.vechirko.fbsample.ui.user;
 
 public interface PageTitle {
 

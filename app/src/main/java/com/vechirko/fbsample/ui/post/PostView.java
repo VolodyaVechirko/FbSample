@@ -1,4 +1,4 @@
-package com.vechirko.fbsample.post;
+package com.vechirko.fbsample.ui.post;
 
 import com.vechirko.fbsample.data.model.PostModel;
 

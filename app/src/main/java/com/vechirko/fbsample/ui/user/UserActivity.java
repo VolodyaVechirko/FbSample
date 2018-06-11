@@ -1,4 +1,4 @@
-package com.vechirko.fbsample.user;
+package com.vechirko.fbsample.ui.user;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,11 +20,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.vechirko.fbsample.R;
-import com.vechirko.fbsample.albums.AlbumsFragment;
-import com.vechirko.fbsample.data.Errors;
 import com.vechirko.fbsample.data.model.UserModel;
-import com.vechirko.fbsample.data.repository.Repository;
-import com.vechirko.fbsample.posts.PostsFragment;
+import com.vechirko.fbsample.ui.albums.AlbumsFragment;
+import com.vechirko.fbsample.ui.posts.PostsFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,7 +45,7 @@ public class UserActivity extends AppCompatActivity implements UserView, AppBarL
     static final int PERCENTAGE_TO_ANIMATE_AVATAR = 20;
     boolean mIsAvatarShown = true;
 
-    Repository repository;
+    UserPresenter presenter;
 
     public static Intent newIntent(Context context, String userId) {
         return new Intent(context, UserActivity.class)
@@ -58,16 +56,17 @@ public class UserActivity extends AppCompatActivity implements UserView, AppBarL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-        repository = new Repository();
         findViewsById();
         initViews();
 
+        presenter = new UserPresenter(this);
+        presenter.getUser(getUserId());
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        repository.onDestroy();
+        presenter.onDestroy();
     }
 
     private void initViews() {
@@ -100,17 +99,6 @@ public class UserActivity extends AppCompatActivity implements UserView, AppBarL
         });
 
         fab.setOnClickListener(view -> {/**/});
-
-        showLoading(true);
-        repository.get(UserModel.class)
-                .where(UserModel.ID, getUserId())
-                .findAll()
-                .map(coll -> coll.iterator().next())
-                .subscribe(
-                        this::setData,
-                        Errors.handle(this::showError),
-                        () -> showLoading(false)
-                );
     }
 
     private void findViewsById() {

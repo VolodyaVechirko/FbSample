@@ -1,4 +1,4 @@
-package com.vechirko.fbsample.albums;
+package com.vechirko.fbsample.ui.posts;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,13 +13,13 @@ import android.widget.TextView;
 
 import com.vechirko.fbsample.R;
 import com.vechirko.fbsample.data.Errors;
-import com.vechirko.fbsample.data.model.AlbumModel;
+import com.vechirko.fbsample.data.model.PostModel;
 import com.vechirko.fbsample.data.repository.Repository;
-import com.vechirko.fbsample.user.PageTitle;
+import com.vechirko.fbsample.ui.user.PageTitle;
 
 import java.util.Collection;
 
-public class AlbumsFragment extends Fragment implements AlbumsView, PageTitle {
+public class PostsFragment extends Fragment implements PostsView, PageTitle {
 
     private static final String ARG_USER_ID = "user_id";
 
@@ -28,10 +28,10 @@ public class AlbumsFragment extends Fragment implements AlbumsView, PageTitle {
     ProgressBar progress;
 
     Repository repository;
-    AlbumsAdapter adapter;
+    PostsAdapter adapter;
 
-    public static AlbumsFragment newInstance(String userId) {
-        AlbumsFragment fragment = new AlbumsFragment();
+    public static PostsFragment newInstance(String userId) {
+        PostsFragment fragment = new PostsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_USER_ID, userId);
         fragment.setArguments(args);
@@ -46,7 +46,7 @@ public class AlbumsFragment extends Fragment implements AlbumsView, PageTitle {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_albums, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_posts, container, false);
         findViewsById(rootView);
         initViews();
 
@@ -60,11 +60,11 @@ public class AlbumsFragment extends Fragment implements AlbumsView, PageTitle {
     }
 
     private void initViews() {
-        recyclerView.setAdapter(adapter = new AlbumsAdapter());
+        recyclerView.setAdapter(adapter = new PostsAdapter());
 
         showLoading(true);
-        repository.get(AlbumModel.class)
-                .where(AlbumModel.USER_ID, getUserId())
+        repository.get(PostModel.class)
+                .where(PostModel.USER_ID, getUserId())
                 .findAll()
                 .subscribe(
                         this::setData,
@@ -98,7 +98,7 @@ public class AlbumsFragment extends Fragment implements AlbumsView, PageTitle {
     }
 
     @Override
-    public void setData(Collection<AlbumModel> data) {
+    public void setData(Collection<PostModel> data) {
         showEmptyView(data.isEmpty());
         adapter.setData(data);
     }
@@ -110,6 +110,6 @@ public class AlbumsFragment extends Fragment implements AlbumsView, PageTitle {
 
     @Override
     public int getPageTitle() {
-        return R.string.albums;
+        return R.string.posts;
     }
 }

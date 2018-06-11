@@ -1,10 +1,10 @@
-package com.vechirko.fbsample.posts;
+package com.vechirko.fbsample.ui.albums;
 
-import com.vechirko.fbsample.data.model.PostModel;
+import com.vechirko.fbsample.data.model.AlbumModel;
 
 import java.util.Collection;
 
-public interface PostsView {
+public interface AlbumsView {
 
     String getUserId();
 
@@ -12,7 +12,7 @@ public interface PostsView {
 
     void showError(String message);
 
-    void setData(Collection<PostModel> data);
+    void setData(Collection<AlbumModel> data);
 
     void showEmptyView(boolean show);
 }

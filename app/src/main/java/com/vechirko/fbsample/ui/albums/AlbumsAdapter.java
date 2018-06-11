@@ -1,4 +1,4 @@
-package com.vechirko.fbsample.albums;
+package com.vechirko.fbsample.ui.albums;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

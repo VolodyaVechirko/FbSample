@@ -1,4 +1,4 @@
-package com.vechirko.fbsample.users;
+package com.vechirko.fbsample.ui.users;
 
 import com.vechirko.fbsample.data.model.UserModel;
 

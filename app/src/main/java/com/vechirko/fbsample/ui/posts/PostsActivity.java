@@ -1,11 +1,11 @@
-package com.vechirko.fbsample.post;
+package com.vechirko.fbsample.ui.posts;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,59 +16,67 @@ import android.widget.TextView;
 import com.vechirko.fbsample.R;
 import com.vechirko.fbsample.data.model.PostModel;
 
-public class PostActivity extends AppCompatActivity implements PostView {
+import java.util.Collection;
+
+public class PostsActivity extends AppCompatActivity implements PostsView {
 
     Toolbar toolbar;
-    TextView bodyText;
+    FloatingActionButton fab;
+    RecyclerView recyclerView;
     TextView emptyView;
     ProgressBar progress;
 
-    PostPresenter presenter;
-
-    public static Intent newIntent(Context context, String postId) {
-        return new Intent(context, PostActivity.class)
-                .putExtra(PostModel.ID, postId);
-    }
+    PostsAdapter adapter;
+    PostsPresenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        setContentView(R.layout.activity_posts);
         findViewsById();
         initViews();
 
-        presenter = new PostPresenter(this);
-        presenter.getPost();
+        presenter = new PostsPresenter(this);
+        presenter.getPosts();
     }
 
     private void initViews() {
         setSupportActionBar(toolbar);
+        fab.setOnClickListener(v -> {/**/});
+
+        recyclerView.setAdapter(adapter = new PostsAdapter());
     }
 
     private void findViewsById() {
         toolbar = findViewById(R.id.toolbar);
-        bodyText = findViewById(R.id.bodyText);
+        fab = findViewById(R.id.fab);
+        recyclerView = findViewById(R.id.recyclerView);
         emptyView = findViewById(R.id.emptyView);
         progress = findViewById(R.id.progress);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_post, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_remove:
-                presenter.removePost();
+            case R.id.action_reload:
+                presenter.getPosts();
                 return true;
             case R.id.action_settings:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public String getUserId() {
+        return null;
     }
 
     @Override
@@ -86,15 +94,9 @@ public class PostActivity extends AppCompatActivity implements PostView {
     }
 
     @Override
-    public String getPostId() {
-        return getIntent().getStringExtra(PostModel.ID);
-    }
-
-    @Override
-    public void setData(PostModel data) {
-        toolbar.setTitle(data.getTitle());
-        toolbar.setSubtitle("Author: ".concat(data.getUserId()));
-        bodyText.setText(data.getBody());
+    public void setData(Collection<PostModel> data) {
+        showEmptyView(data.isEmpty());
+        adapter.setData(data);
     }
 
     @Override
